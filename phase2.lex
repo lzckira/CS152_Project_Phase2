@@ -8,11 +8,11 @@ DIGIT [0-9]
 %%
 
 "function" 								{col_num += yyleng; return FUNCTION;}
-"beginparams" 								{col_num += yyleng; return BEGIN_PARAMS;}
-"endparams" 								{col_num += yyleng; return END_PARAMS;}
-"beginlocals" 								{col_num += yyleng; return BEGIN_LOCALS;}
-"endlocals" 								{col_num += yyleng; return END_LOCALS;}
-"beginbody" 								{col_num += yyleng; return BEGIN_BODY;}
+"beginparams" 							{col_num += yyleng; return BEGIN_PARAMS;}
+"endparams" 							{col_num += yyleng; return END_PARAMS;}
+"beginlocals" 							{col_num += yyleng; return BEGIN_LOCALS;}
+"endlocals" 							{col_num += yyleng; return END_LOCALS;}
+"beginbody" 							{col_num += yyleng; return BEGIN_BODY;}
 "endbody" 								{col_num += yyleng; return END_BODY;}
 "integer" 								{col_num += yyleng; return INTEGER;}
 "array" 								{col_num += yyleng; return ARRAY;}
@@ -23,7 +23,7 @@ DIGIT [0-9]
 "else" 									{col_num += yyleng; return ELSE;}
 "while" 								{col_num += yyleng; return WHILE;}
 "do" 									{col_num += yyleng; return DO;}
-"beginloop" 								{col_num += yyleng; return BEGINLOOP;}
+"beginloop" 							{col_num += yyleng; return BEGINLOOP;}
 "endloop" 								{col_num += yyleng; return ENDLOOP;}
 "continue" 								{col_num += yyleng; return CONTINUE;}
 "read" 									{col_num += yyleng; return READ;}
@@ -45,9 +45,9 @@ DIGIT [0-9]
 ">"  									{col_num += yyleng; return GT;}
 "<=" 									{col_num += yyleng; return LTE;}
 ">=" 									{col_num += yyleng; return GTE;}
-{LETTER}({LETTER}|{DIGIT})*(_({LETTER}|{DIGIT})+)* 			{yylval.id_val = atoi(yytext); col_num += yyleng; return IDENT;}
-{DIGIT}+{LETTER}+({LETTER}|{DIGIT})*(_({LETTER}|{DIGIT})+)*(_)*  	{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", line_num, col_num, yytext); exit(0);}
-{LETTER}({LETTER}|{DIGIT})*(_({LETTER}|{DIGIT})+)*(_)+ 			{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", line_num, col_num, yytext); exit(0);}
+{LETTER}({LETTER}|{DIGIT})*((_)+({LETTER}|{DIGIT})+)* 					{yylval.id_val = atoi(yytext); col_num += yyleng; return IDENT;}
+({DIGIT}|_)+{LETTER}({LETTER}|{DIGIT})*((_)+({LETTER}|{DIGIT})+)*(_)*  	{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", line_num, col_num, yytext); exit(0);}
+({LETTER}|{DIGIT})*((_)+({LETTER}|{DIGIT})+)*(_)+ 						{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", line_num, col_num, yytext); exit(0);}
 {DIGIT}+   								{yylval.ival = atof(yytext); col_num += yyleng; return NUMBER;}
 ";"  									{col_num += yyleng; return SEMICOLON;} 
 ":"  									{col_num += yyleng; return COLON;}
