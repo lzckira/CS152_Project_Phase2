@@ -89,8 +89,11 @@ vars:		var{printf("vars -> var\n");}
 		;
 
 bool_exp:	relation_and_exp{printf("bool_exp -> relation_and_exp\n");}
-		| relation_and_exp OR relation_and_exp{printf("bool_exp -> relation_and_exp OR relation_and_exp\n");}
+		| relation_and_exp OR relation_and_exps{printf("bool_exp -> relation_and_exp OR relation_and_exp\n");}
 		;
+
+relation_and_exps: relation_and_exp{printf("shishi\n");}
+		|relation_and_exp OR relation_and_exps{printf("shenmegui\n");}
 
 relation_and_exp:relation_exp{printf("relation_and_exp -> relation_exp\n");}
 		|relation_exp AND relation_exp{printf("relation_and_exp -> relation_exp AND relation_exp\n");}
