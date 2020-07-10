@@ -48,7 +48,7 @@ DIGIT [0-9]
 ">=" 									{col_num += yyleng; return GTE;}
 {LETTER}({LETTER}|{DIGIT})*((_)+({LETTER}|{DIGIT})+)* 					{yylval.id_val = atoi(yytext); col_num += yyleng; return IDENT;}
 ({DIGIT}|_)+{LETTER}({LETTER}|{DIGIT})*((_)+({LETTER}|{DIGIT})+)*(_)*  	{printf("Error at line %d, column %d: identifier \"%s\" must begin with a letter\n", line_num, col_num, yytext); exit(0);}
-({LETTER}|{DIGIT})*((_)+({LETTER}|{DIGIT})+)*(_)+ 						{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", line_num, col_num, yytext); exit(0);}
+{LETTER}({LETTER}|{DIGIT})*((_)+({LETTER}|{DIGIT})+)*(_)+ 						{printf("Error at line %d, column %d: identifier \"%s\" cannot end with an underscore\n", line_num, col_num, yytext); exit(0);}
 {DIGIT}+   								{yylval.ival = atof(yytext); col_num += yyleng; return NUMBER;}
 ";"  									{col_num += yyleng; return SEMICOLON;} 
 ":"  									{col_num += yyleng; return COLON;}
