@@ -21,7 +21,6 @@ FILE * yyin;
 
 %token FUNCTION BEGIN_PARAMS END_PARAMS BEGIN_LOCALS END_LOCALS BEGIN_BODY END_BODY INTEGER ARRAY
 %token OF IF THEN ENDIF ELSE WHILE DO BEGINLOOP ENDLOOP CONTINUE READ WRITE AND OR NOT TRUE FALSE RETURN
-%token UNARY_MINUS
 %token SUB ADD
 %token MULT DIV MOD
 %token EQ NEQ LT GT LTE GTE
@@ -30,15 +29,15 @@ FILE * yyin;
 %token <id_val> IDENT
 
 %left L_PAREN R_PAREN 								/* Precedence 0 */
-%left L_SQUARE_BRACKET R_SQUARE_BRACKET 			/* Precedence 1 */
-%right UNARY_MINUS									/* Precedence 2 */
-%left MULT DIV MOD 									/* Precedence 3 */
-%left SUB ADD 										/* Precedence 4 */
+%left L_SQUARE_BRACKET R_SQUARE_BRACKET 					/* Precedence 1 */
+%right UMINUS									/* Precedence 2 */
+%left MULT DIV MOD 								/* Precedence 3 */
+%left SUB ADD 									/* Precedence 4 */
 %left EQ NEQ LT GT LTE GTE 							/* Precedence 5 */
-%right NOT 											/* Precedence 6 */
-%left AND 											/* Precedence 7 */
-%left OR 											/* Precedence 8 */
-%right ASSIGN										/* Precedence 9 */
+%right NOT 									/* Precedence 6 */
+%left AND 									/* Precedence 7 */
+%left OR 									/* Precedence 8 */
+%right ASSIGN									/* Precedence 9 */
 %nonassoc UMINUS
 
 
