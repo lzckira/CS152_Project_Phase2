@@ -14,7 +14,7 @@ FILE * yyin;
 
 %union{
 	int ival;
-	string* id_val;
+	char* id_val;
 }
 
 %start prog_start
@@ -30,7 +30,7 @@ FILE * yyin;
 
 %left L_PAREN R_PAREN 								/* Precedence 0 */
 %left L_SQUARE_BRACKET R_SQUARE_BRACKET 					/* Precedence 1 */
-%right UMINUS									/* Precedence 2 */
+/* %right UMINUS									 Precedence 2 */
 %left MULT DIV MOD 								/* Precedence 3 */
 %left SUB ADD 									/* Precedence 4 */
 %left EQ NEQ LT GT LTE GTE 							/* Precedence 5 */
@@ -85,10 +85,10 @@ statement:	var ASSIGN expression {printf("statement -> var ASSIGN expression\n")
 		;
 
 vars:		var{printf("vars -> var\n");}
-		| var COMMA vars{printf("vars -> var COMMA vars\n")}
+		| var COMMA vars{printf("vars -> var COMMA vars\n");}
 		;
 
-bool_exp:	relation_and_exp{printf("bool_exp -> relation_and_exp");}
+bool_exp:	relation_and_exp{printf("bool_exp -> relation_and_exp\n");}
 		| relation_and_exp OR relation_and_exp{printf("bool_exp -> relation_and_exp OR relation_and_exp\n");}
 		;
 
@@ -126,11 +126,11 @@ multiplicative_expression: term{printf("multiplicative_expression -> term\n");}
 		;
 
 term:		var{printf("term -> var\n");}
-		| SUB var{printf("term -> SUB var\n");}
+		| SUB var %prec UMINUS{printf("term -> SUB var\n");}
 		| NUMBER{printf("term -> NUMBER\n");}
-		| SUB NUMBER{printf("term -> SUB NUMBER\n");}
+		| SUB NUMBER %prec UMINUS{printf("term -> SUB NUMBER\n");}
 		| L_PAREN expression R_PAREN{printf("term -> L_PAREN expression R_PAREN\n");}
-		| SUB L_PAREN expression R_PAREN{printf("term -> SUB L_PAREN expression R_PAREN\n");}
+		| SUB L_PAREN expression R_PAREN %prec UMINUS{printf("term -> SUB L_PAREN expression R_PAREN\n");}
 		| IDENT L_PAREN R_PAREN{printf("term -> IDENT L_PAREN R_PAREN\n");}
 		| IDENT L_PAREN expressions R_PAREN{printf("term -> IDENT L_PAREN expressions R_PAREN\n");}
 		;
@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
 }
 
 void yyerror(const char *msg) {
-   printf("** Line %d, position %d: %s\n", currLine, currPos, msg);
+   printf("** Line %d, position %d: %s\n", line_num, col_num, msg);
 }
 
 
