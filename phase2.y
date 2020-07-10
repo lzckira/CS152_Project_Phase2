@@ -89,14 +89,19 @@ vars:		var{printf("vars -> var\n");}
 		;
 
 bool_exp:	relation_and_exp{printf("bool_exp -> relation_and_exp\n");}
-		| relation_and_exp OR relation_and_exps{printf("bool_exp -> relation_and_exp OR relation_and_exp\n");}
+		| relation_and_exp relation_and_exps{printf("bool_exp -> relation_and_exp relation_and_exps\n");}
 		;
 
-relation_and_exps: relation_and_exp{printf("shishi\n");}
-		|relation_and_exp OR relation_and_exps{printf("shenmegui\n");}
+relation_and_exps: OR relation_and_exp{printf("relation_and_exps -> OR relation_and_exp\n");}
+		| OR relation_and_exp relation_and_exps{printf("relation_and_exps -> OR relation_and_exp relation_and_exps\n");}
+		;
 
-relation_and_exp:relation_exp{printf("relation_and_exp -> relation_exp\n");}
-		|relation_exp AND relation_exp{printf("relation_and_exp -> relation_exp AND relation_exp\n");}
+relation_and_exp: relation_exp{printf("relation_and_exp -> relation_exp\n");}
+		| relation_exp relation_exps{printf("relation_and_exp -> relation_exp relation_exps\n");}
+		;
+
+relation_exps: AND relation_exp {printf("relation_exps -> AND relation_exp\n");}
+		| AND relation_exp relation_exps {printf("relation_exps -> AND relation_exp relation_exps\n");}
 		;
 
 relation_exp:	expression comp expression{printf("relation_exp -> expression comp expression\n");}
@@ -118,14 +123,25 @@ comp:		EQ{printf("comp -> EQ\n");}
 		;
 
 expression:	multiplicative_expression{printf("expression -> multiplicative_expression\n");}
-		| multiplicative_expression ADD multiplicative_expression{printf("expression -> multiplicative_expression ADD multiplicative_expression\n");}
-		| multiplicative_expression SUB multiplicative_expression{printf("expression -> multiplicative_expression SUB multiplicative_expression\n");}
+		| multiplicative_expression multiplicative_expressions{printf("expression -> multiplicative_expression multiplicative_expressions\n");}
+		;
+		
+multiplicative_expressions: ADD multiplicative_expression {printf("multiplicative_expressions -> ADD multiplicative_expression\n");}
+		| SUB multiplicative_expression {printf("multiplicative_expressions -> SUB multiplicative_expression\n");}
+		| ADD multiplicative_expression multiplicative_expressions {printf("multiplicative_expressions -> ADD multiplicative_expression multiplicative_expressions\n");}
+		| SUB multiplicative_expression multiplicative_expressions {printf("multiplicative_expressions -> SUB multiplicative_expression multiplicative_expressions\n");}
 		;
 
 multiplicative_expression: term{printf("multiplicative_expression -> term\n");}
-		| term MULT term{printf("multiplicative_expression -> term MULT term\n");}
-		| term DIV term{printf("multiplicative_expression -> term DIV term\n");}
-		| term MOD term{printf("multiplicative_expression -> term MOD term\n");}
+		| term terms{printf("multiplicative_expression -> term terms\n");}
+		;
+		
+terms: MULT term {printf("terms -> MULT term\n");}
+		| DIV term {printf("terms -> DIV term\n");}
+		| MOD term {printf("terms -> MOD term\n");}
+		| MULT term terms {printf("terms -> MULT term terms\n");}
+		| DIV term terms {printf("terms -> DIV term terms\n");}
+		| MOD term terms {printf("terms -> MOD term terms\n");}
 		;
 
 term:		var{printf("term -> var\n");}
