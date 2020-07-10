@@ -39,6 +39,7 @@ FILE * yyin;
 %left AND 											/* Precedence 7 */
 %left OR 											/* Precedence 8 */
 %right ASSIGN										/* Precedence 9 */
+%nonassoc UMINUS
 
 
 %%
