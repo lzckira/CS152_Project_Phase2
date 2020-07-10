@@ -67,21 +67,4 @@ DIGIT [0-9]
 
 %%
 
-int main(int argc, char ** argv)
-{
-   if(argc >= 2)
-   {
-      yyin = fopen(argv[1], "r");
-      if(yyin == NULL)
-      {
-        printf("Error: Input file not exist\n");
-	exit(0);
-      }
-   }
-   else
-   {
-      yyin = stdin;
-   }
-   yylex();
-}
 
