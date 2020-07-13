@@ -1,6 +1,6 @@
-lexer: phase1.lex
-	flex phase1.lex
-	gcc -o lexer lex.yy.c -lfl
-
+parse: phase2.lex phase2.y
+	bison -v -d --file-prefix=y phase2.y
+	flex phase2.lex
+	gcc -o parser y.tab.c lex.yy.c -lfl
 clean:
-	rm -f lex.yy.c *.o lexer
+	rm -f lex.yy.c *.o parser
