@@ -93,7 +93,8 @@ extern int yydebug;
     ASSIGN = 303,
     NUMBER = 304,
     IDENT = 305,
-    UMINUS = 306
+    ERROR = 306,
+    UMINUS = 307
   };
 #endif
 
@@ -102,12 +103,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 15 "phase2.y" /* yacc.c:1909  */
+#line 16 "phase2.y" /* yacc.c:1909  */
 
 	int ival;
 	char* id_val;
 
-#line 111 "y.tab.h" /* yacc.c:1909  */
+#line 112 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

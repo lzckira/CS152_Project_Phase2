@@ -1113,7 +1113,7 @@ YY_RULE_SETUP
 case 54:
 YY_RULE_SETUP
 #line 66 "phase2.lex"
-{printf("Error at Line %d column %d :\"%s\" is an unrecognized symbol\n", line_num, col_num, yytext);exit(0);}
+{col_num += yyleng; return ERROR;} /* {printf("Error at Line %d column %d :\"%s\" is an unrecognized symbol\n", line_num, col_num, yytext);exit(0);} */
 	YY_BREAK
 case 55:
 YY_RULE_SETUP

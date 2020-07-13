@@ -10,6 +10,7 @@ void yyerror(const char *msg);
 extern int line_num;
 extern int col_num;
 FILE * yyin;
+int errorFlag = 0;
 %}
 
 %union{
@@ -27,18 +28,19 @@ FILE * yyin;
 %token SEMICOLON COLON COMMA L_PAREN R_PAREN L_SQUARE_BRACKET R_SQUARE_BRACKET ASSIGN
 %token <ival> NUMBER
 %token <id_val> IDENT
+%token ERROR
 
-%left L_PAREN R_PAREN 								/* Precedence 0 */
-%left L_SQUARE_BRACKET R_SQUARE_BRACKET 					/* Precedence 1 */
-/* %right UMINUS									 Precedence 2 */
-%left MULT DIV MOD 								/* Precedence 3 */
-%left SUB ADD 									/* Precedence 4 */
-%left EQ NEQ LT GT LTE GTE 							/* Precedence 5 */
-%right NOT 									/* Precedence 6 */
-%left AND 									/* Precedence 7 */
-%left OR 									/* Precedence 8 */
 %right ASSIGN									/* Precedence 9 */
-%nonassoc UMINUS
+%left OR 									/* Precedence 8 */
+%left AND 									/* Precedence 7 */
+%right NOT 									/* Precedence 6 */
+%left EQ NEQ LT GT LTE GTE 							/* Precedence 5 */
+%left SUB ADD 									/* Precedence 4 */
+
+%left MULT DIV MOD 								/* Precedence 3 */
+%right UMINUS									 /* Precedence 2 */
+%left L_SQUARE_BRACKET R_SQUARE_BRACKET 					/* Precedence 1 */
+%left L_PAREN R_PAREN 								/* Precedence 0 */
 
 
 %%
@@ -60,6 +62,7 @@ declarations:	{printf("declarations -> epsilon\n");}
 
 declaration:	identifiers COLON INTEGER{printf("declaration -> identifiers COLON INTEGER\n");}
 		| identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER{printf("declaration -> identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");}
+		| identifiers INTEGER {printf("Syntax error at Line %d, position %d: invalid declaration\n", line_num, col_num);}
 		;
 
 identifiers:	ident{printf("identifiers -> ident\n");}
@@ -82,6 +85,7 @@ statement:	var ASSIGN expression {printf("statement -> var ASSIGN expression\n")
 		| WRITE vars{printf("statement -> WRITE vars\n");}
 		| CONTINUE {printf("statement -> CONTINUE\n");}
 		| RETURN expression{printf("statement -> RETURN expression\n");}
+		| var {errorFlag = 1;}error expression {printf("Syntax error at Line %d, position %d: \":=\" expected\n", line_num, col_num);}
 		;
 
 vars:		var{printf("vars -> var\n");}
@@ -176,7 +180,10 @@ int main(int argc, char **argv) {
 }
 
 void yyerror(const char *msg) {
-   printf("** Line %d, position %d: %s\n", line_num, col_num, msg);
+   if(errorFlag == 0) {
+       printf("** Line %d, position %d: %s\n", line_num, col_num, msg);
+   }
+   errorFlag = 0;
 }
 
 

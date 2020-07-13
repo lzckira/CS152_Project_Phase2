@@ -63,7 +63,7 @@ DIGIT [0-9]
 "\n" 									{line_num++, col_num=1;}
 
 
-. {printf("Error at Line %d column %d :\"%s\" is an unrecognized symbol\n", line_num, col_num, yytext);exit(0);}
+. 										{col_num += yyleng; return ERROR;} /* {printf("Error at Line %d column %d :\"%s\" is an unrecognized symbol\n", line_num, col_num, yytext);exit(0);} */
 
 %%
 
