@@ -11,6 +11,7 @@ extern int line_num;
 extern int col_num;
 FILE * yyin;
 int errorFlag = 0;
+int tempLine;
 %}
 
 %union{
@@ -52,17 +53,20 @@ functions:	{printf("functions -> epsilon\n");}
 		| function functions{printf("functions -> function functions\n");}
 		;
 
-function:	FUNCTION IDENT SEMICOLON BEGIN_PARAMS declarations END_PARAMS BEGIN_LOCALS declarations END_LOCALS BEGIN_BODY statements END_BODY
-		{printf("function -> FUNCTION IDENT SEMICOLON BEGIN_PARAMS declarations END_PARAMS BEGIN_LOCALS declarations END_LOCALS BEGIN_BODY statements END_BODY\n");}
+function:	FUNCTION ident SEMICOLON BEGIN_PARAMS declarations END_PARAMS BEGIN_LOCALS declarations END_LOCALS BEGIN_BODY statements END_BODY
+		{printf("function -> FUNCTION identifier SEMICOLON BEGIN_PARAMS declarations END_PARAMS BEGIN_LOCALS declarations END_LOCALS BEGIN_BODY statements END_BODY\n");}
+		|	FUNCTION ident{tempLine = line_num - 1;} BEGIN_PARAMS declarations END_PARAMS BEGIN_LOCALS declarations END_LOCALS BEGIN_BODY statements END_BODY
+		{printf("Syntax error at Line %d: missing ; after identifier\n", tempLine);}
 		;
 
 declarations:	{printf("declarations -> epsilon\n");}
-		| declaration SEMICOLON declarations {printf("declarations -> declaration SEMICOLON declarations\n");}
+		| declarations declaration SEMICOLON {printf("declarations -> declarations declaration SEMICOLON\n");}
+		| declarations declaration {printf("Syntax error at Line %d: missing ; at the end\n", line_num - 1);}
 		;
 
 declaration:	identifiers COLON INTEGER{printf("declaration -> identifiers COLON INTEGER\n");}
 		| identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER{printf("declaration -> identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");}
-		| identifiers INTEGER {printf("Syntax error at Line %d, position %d: invalid declaration\n", line_num, col_num);}
+		| identifiers INTEGER {printf("Syntax error at Line %d: invalid declaration\n", line_num);}
 		;
 
 identifiers:	ident{printf("identifiers -> ident\n");}
@@ -73,7 +77,8 @@ ident:		IDENT{printf("ident = IDENT %s\n",$1);}
 		;
 
 statements:	{printf("statements -> epsilon\n");}
-		| statement SEMICOLON statements{printf("statements -> statement SEMICOLON statements\n");}
+		| statements statement SEMICOLON {printf("statements -> statements statement SEMICOLON\n");}
+		| statements statement {printf("Syntax error at Line %d: missing ; at the end.\n", line_num - 1);}
 		;
 
 statement:	var ASSIGN expression {printf("statement -> var ASSIGN expression\n");}
@@ -85,7 +90,7 @@ statement:	var ASSIGN expression {printf("statement -> var ASSIGN expression\n")
 		| WRITE vars{printf("statement -> WRITE vars\n");}
 		| CONTINUE {printf("statement -> CONTINUE\n");}
 		| RETURN expression{printf("statement -> RETURN expression\n");}
-		| var {errorFlag = 1;}error expression {printf("Syntax error at Line %d, position %d: \":=\" expected\n", line_num, col_num);}
+		| var {errorFlag = 1;}error expression {printf("Syntax error at Line %d: \":=\" expected\n", line_num);}
 		;
 
 vars:		var{printf("vars -> var\n");}
