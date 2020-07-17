@@ -12,6 +12,7 @@ extern int col_num;
 FILE * yyin;
 int errorFlag = 0;
 int tempLine;
+
 %}
 
 %union{
@@ -66,7 +67,14 @@ declarations:	{printf("declarations -> epsilon\n");}
 
 declaration:	identifiers COLON INTEGER{printf("declaration -> identifiers COLON INTEGER\n");}
 		| identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER{printf("declaration -> identifiers COLON ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER\n");}
+		| identifiers {errorFlag = 1;}error errorDeclaration
 		| identifiers INTEGER {printf("Syntax error at Line %d: invalid declaration\n", line_num);}
+		| identifiers ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER{printf("Syntax error at Line %d: invalid declaration\n", line_num);}
+		;
+		
+errorDeclaration: 
+		INTEGER {printf("Syntax error at Line %d: invalid declaration\n", line_num);}
+		| ARRAY L_SQUARE_BRACKET NUMBER R_SQUARE_BRACKET OF INTEGER{printf("Syntax error at Line %d: invalid declaration\n", line_num);}
 		;
 
 identifiers:	ident{printf("identifiers -> ident\n");}

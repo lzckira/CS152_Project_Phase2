@@ -3,6 +3,8 @@ beginparams
 endparams
 beginlocals
 a : integer
+a  integer;
+a . integer;
 endlocals
 beginbody
 a = 1 + 2 * 3;
@@ -12,7 +14,9 @@ function main
 beginparams
 endparams
 beginlocals
-a integer;
+a : array[29] of integer
+a  array[29] of integer;
+a . array[29] of integer;
 endlocals
 beginbody
 a := 1 + 2 * 3
